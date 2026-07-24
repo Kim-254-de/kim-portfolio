@@ -148,6 +148,115 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   })();
 
+  (function renderAchievements() {
+    const grid = document.getElementById('achievements-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    (siteData.achievements || []).forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'achievement-card';
+
+      const h4 = document.createElement('h4');
+      h4.textContent = a.title;
+
+      const desc = document.createElement('p');
+      desc.textContent = a.desc || '';
+
+      card.appendChild(h4);
+      if (a.date) {
+        const date = document.createElement('p');
+        date.className = 'achievement-date';
+        date.textContent = a.date;
+        card.appendChild(date);
+      }
+      card.appendChild(desc);
+      grid.appendChild(card);
+    });
+  })();
+
+  (function renderTalks() {
+    const list = document.getElementById('talks-list');
+    if (!list) return;
+    list.innerHTML = '';
+    (siteData.talks || []).forEach(t => {
+      const item = document.createElement('div');
+      item.className = 'talk-item';
+
+      const marker = document.createElement('div');
+      marker.className = 'talk-marker';
+
+      const content = document.createElement('div');
+      content.className = 'talk-content';
+
+      const h4 = document.createElement('h4');
+      h4.textContent = t.title;
+
+      const meta = document.createElement('p');
+      meta.className = 'talk-meta';
+      meta.textContent = [t.event, t.date].filter(Boolean).join(' — ');
+
+      const desc = document.createElement('p');
+      desc.textContent = t.desc || '';
+
+      content.appendChild(h4);
+      if (t.event || t.date) content.appendChild(meta);
+      if (t.desc) content.appendChild(desc);
+
+      if (t.link) {
+        const link = document.createElement('a');
+        link.className = 'talk-link';
+        link.href = t.link;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'View slides / recording';
+        content.appendChild(link);
+      }
+
+      item.appendChild(marker);
+      item.appendChild(content);
+      list.appendChild(item);
+    });
+  })();
+
+  (function renderCertifications() {
+    const grid = document.getElementById('certifications-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    (siteData.certifications || []).forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'certification-card';
+
+      if (c.image) {
+        const img = document.createElement('img');
+        img.className = 'certification-img';
+        img.src = c.image;
+        img.alt = c.title + ' badge';
+        card.appendChild(img);
+      }
+
+      const h4 = document.createElement('h4');
+      h4.textContent = c.title;
+      card.appendChild(h4);
+
+      const meta = document.createElement('p');
+      meta.className = 'certification-meta';
+      meta.textContent = [c.issuer, c.date].filter(Boolean).join(' — ');
+      if (c.issuer || c.date) card.appendChild(meta);
+
+      if (c.credentialUrl) {
+        const link = document.createElement('a');
+        link.className = 'certification-link';
+        link.href = c.credentialUrl;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'Verify credential';
+        card.appendChild(link);
+      }
+
+      grid.appendChild(card);
+    });
+  })();
+
   // ===== PARTICLES ANIMATION =====
   const canvas = document.getElementById('particles-canvas');
   if (canvas) {

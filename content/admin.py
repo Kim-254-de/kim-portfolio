@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Project, Experience, Testimonial, SkillOverride
+from .models import (
+    Project, Experience, Testimonial, SkillOverride,
+    Achievement, Talk, Certification,
+)
 
 
 @admin.register(Project)
@@ -34,3 +37,30 @@ class TestimonialAdmin(admin.ModelAdmin):
 @admin.register(SkillOverride)
 class SkillOverrideAdmin(admin.ModelAdmin):
     list_display = ('name', 'level')
+
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'order')
+    list_editable = ('order',)
+    ordering = ('order',)
+
+
+@admin.register(Talk)
+class TalkAdmin(admin.ModelAdmin):
+    list_display = ('title', 'event', 'date', 'order')
+    list_editable = ('order',)
+    ordering = ('order',)
+
+
+@admin.register(Certification)
+class CertificationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'issuer', 'date', 'thumb', 'order')
+    list_editable = ('order',)
+    ordering = ('order',)
+
+    def thumb(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="height:36px;border-radius:4px;">', obj.image.url)
+        return '—'
+    thumb.short_description = 'Preview'

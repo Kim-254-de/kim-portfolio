@@ -3,7 +3,10 @@ from pathlib import Path
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from content.models import Project, Experience, Testimonial
+from content.models import (
+    Project, Experience, Testimonial,
+    Achievement, Talk, Certification,
+)
 
 SEED_IMAGES_DIR = Path(__file__).resolve().parent.parent.parent / 'seed_data' / 'images'
 
@@ -81,6 +84,39 @@ TESTIMONIALS = [
     ),
 ]
 
+ACHIEVEMENTS = [
+    dict(
+        title='Winner — Campus Innovation Hackathon',
+        desc='Placed first among 40+ teams for the Campus Shop project.',
+        date='2024',
+    ),
+    dict(
+        title='Dean\'s List',
+        desc='Recognized for academic performance in Computer Science.',
+        date='2023',
+    ),
+]
+
+TALKS = [
+    dict(
+        title='Building Real-Time Systems with WebSockets',
+        event='Campus Tech Meetup',
+        date='2024',
+        desc='A hands-on session on real-time architecture, using the Evoting System as a case study.',
+        link='',
+    ),
+]
+
+CERTIFICATIONS = [
+    dict(
+        title='Meta Front-End Developer',
+        issuer='Coursera / Meta',
+        date='2024',
+        credential_url='',
+        image='',
+    ),
+]
+
 
 class Command(BaseCommand):
     help = 'Seed the database with the original portfolio content. Skips anything that already exists.'
@@ -121,5 +157,34 @@ class Command(BaseCommand):
                 self.stdout.write(f"Created testimonial: {t['name']}")
         else:
             self.stdout.write(self.style.WARNING('Testimonials already exist — skipping.'))
+
+        if not Achievement.objects.exists():
+            for i, a in enumerate(ACHIEVEMENTS, start=1):
+                Achievement.objects.create(
+                    title=a['title'], description=a['desc'], date=a['date'], order=i
+                )
+                self.stdout.write(f"Created achievement: {a['title']}")
+        else:
+            self.stdout.write(self.style.WARNING('Achievements already exist — skipping.'))
+
+        if not Talk.objects.exists():
+            for i, t in enumerate(TALKS, start=1):
+                Talk.objects.create(
+                    title=t['title'], event=t['event'], date=t['date'],
+                    description=t['desc'], link=t['link'], order=i
+                )
+                self.stdout.write(f"Created talk: {t['title']}")
+        else:
+            self.stdout.write(self.style.WARNING('Talks already exist — skipping.'))
+
+        if not Certification.objects.exists():
+            for i, c in enumerate(CERTIFICATIONS, start=1):
+                Certification.objects.create(
+                    title=c['title'], issuer=c['issuer'], date=c['date'],
+                    credential_url=c['credential_url'], order=i
+                )
+                self.stdout.write(f"Created certification: {c['title']}")
+        else:
+            self.stdout.write(self.style.WARNING('Certifications already exist — skipping.'))
 
         self.stdout.write(self.style.SUCCESS('Seed complete.'))

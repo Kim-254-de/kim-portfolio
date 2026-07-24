@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from .models import Project, Experience, Testimonial, SkillOverride
+from .models import (
+    Project, Experience, Testimonial, SkillOverride,
+    Achievement, Talk, Certification,
+)
 
 
 @require_GET
@@ -8,7 +11,8 @@ def site_data(request):
     """
     Returns all portfolio content as JSON, in the same shape the frontend
     previously read from data.js:
-    { projects: [...], experience: [...], testimonials: [...], skillLevels: {...} }
+    { projects: [...], experience: [...], testimonials: [...], skillLevels: {...},
+      achievements: [...], talks: [...], certifications: [...] }
     """
     projects = [
         {
@@ -42,9 +46,43 @@ def site_data(request):
 
     skill_levels = {s.name: s.level for s in SkillOverride.objects.all()}
 
+    achievements = [
+        {
+            'title': a.title,
+            'desc': a.description,
+            'date': a.date,
+        }
+        for a in Achievement.objects.all()
+    ]
+
+    talks = [
+        {
+            'title': t.title,
+            'event': t.event,
+            'date': t.date,
+            'desc': t.description,
+            'link': t.link,
+        }
+        for t in Talk.objects.all()
+    ]
+
+    certifications = [
+        {
+            'title': c.title,
+            'issuer': c.issuer,
+            'date': c.date,
+            'credentialUrl': c.credential_url,
+            'image': c.image.url if c.image else '',
+        }
+        for c in Certification.objects.all()
+    ]
+
     return JsonResponse({
         'projects': projects,
         'experience': experience,
         'testimonials': testimonials,
         'skillLevels': skill_levels,
+        'achievements': achievements,
+        'talks': talks,
+        'certifications': certifications,
     })

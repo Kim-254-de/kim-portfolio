@@ -77,3 +77,58 @@ class SkillOverride(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.level}%"
+
+
+class Achievement(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    date = models.CharField(max_length=100, blank=True, help_text="e.g. 2024 or March 2024")
+    order = models.PositiveIntegerField(
+        default=0, help_text="Lower numbers appear first."
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name_plural = "Achievements"
+
+    def __str__(self):
+        return self.title
+
+
+class Talk(models.Model):
+    title = models.CharField(max_length=200, help_text="Talk or workshop title")
+    event = models.CharField(max_length=200, blank=True, help_text="e.g. PyCon Kenya 2024")
+    date = models.CharField(max_length=100, blank=True, help_text="e.g. March 2024")
+    description = models.TextField(blank=True)
+    link = models.URLField(blank=True, help_text="Slides, recording, or event page")
+    order = models.PositiveIntegerField(
+        default=0, help_text="Lower numbers appear first."
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name_plural = "Talks & workshops"
+
+    def __str__(self):
+        return self.title
+
+
+class Certification(models.Model):
+    title = models.CharField(max_length=200)
+    issuer = models.CharField(max_length=200, blank=True)
+    date = models.CharField(max_length=100, blank=True, help_text="e.g. 2024")
+    credential_url = models.URLField(blank=True, help_text="Link to verify the credential")
+    image = models.ImageField(
+        upload_to='certifications/', blank=True, null=True,
+        help_text="Badge or certificate image"
+    )
+    order = models.PositiveIntegerField(
+        default=0, help_text="Lower numbers appear first."
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name_plural = "Certifications"
+
+    def __str__(self):
+        return self.title
