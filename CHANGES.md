@@ -38,8 +38,8 @@ python manage.py migrate                  # applies 0002_achievement_certificati
 python manage.py seed_content             # optional — adds one sample row per section
 ```
 
-On Render: just push. `build.sh` already runs `migrate` and `seed_content`
-on every deploy, so nothing extra to configure there.
+On Railway: just push to `main`. The pre-deploy command runs `migrate` and
+`seed_content` on every deploy, so nothing extra to configure there.
 
 ## Managing content
 Same as everything else — log into `/admin/`. You'll see three new

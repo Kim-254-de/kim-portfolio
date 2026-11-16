@@ -3,7 +3,7 @@ Django settings for portfolio_backend project.
 
 Environment-driven so the same codebase runs:
   - locally with SQLite + local media (no env vars needed), and
-  - in production on Render, with Postgres on Aiven and media on Cloudinary
+  - in production on Railway, with Railway Postgres and media on Cloudinary
     (set the env vars described in README.md).
 """
 
@@ -40,18 +40,24 @@ ALLOWED_HOSTS = [
     h.strip() for h in os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()
 ]
 
-# Render sets this automatically for every deploy — e.g. my-app.onrender.com
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# Railway sets this at runtime to the service's *.up.railway.app domain, so
+# that address always works without listing it in ALLOWED_HOSTS. Custom
+# domains (e.g. emmanuelkimathi.dev) still go in ALLOWED_HOSTS.
+RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
 
 CSRF_TRUSTED_ORIGINS = [
     o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()
 ]
-if RENDER_EXTERNAL_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+# Trust every allowed host over HTTPS so admin logins work on each domain.
+CSRF_TRUSTED_ORIGINS += [
+    f'https://{h}' for h in ALLOWED_HOSTS
+    if h not in ('127.0.0.1', 'localhost') and not h.startswith('.') and '*' not in h
+    and f'https://{h}' not in CSRF_TRUSTED_ORIGINS
+]
 
-# Render terminates TLS at its proxy and forwards plain HTTP internally —
+# Railway terminates TLS at its proxy and forwards plain HTTP internally —
 # without this, Django thinks every request is insecure.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -115,8 +121,7 @@ WSGI_APPLICATION = 'portfolio_backend.wsgi.application'
 # ---------------------------------------------------------------------------
 # Database
 # ---------------------------------------------------------------------------
-# Set DATABASE_URL to use Postgres (e.g. your Aiven connection string,
-# postgres://user:pass@host:port/dbname?sslmode=require). Aiven requires SSL;
+# Set DATABASE_URL to use Postgres (on Railway: ${{Postgres.DATABASE_URL}}).
 # ssl_require=True below adds sslmode=require automatically if the URL
 # doesn't already specify it. With no DATABASE_URL set, falls back to a
 # local SQLite file for development.

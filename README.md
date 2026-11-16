@@ -4,8 +4,9 @@ Content lives in a database, editing happens through Django's built-in
 admin (with login), and project screenshots are uploaded as real files.
 This version is set up to run:
 - **locally** with SQLite + local file storage — no accounts or env vars needed, or
-- **in production** with Postgres hosted on **Aiven**, images on
-  **Cloudinary**, and the app itself on **Render**.
+- **in production** on **Railway** (app + Postgres), with images on **Cloudinary**.
+  Live at https://emmanuelkimathi.dev (Railway address:
+  https://web-production-0d7452f0.up.railway.app).
 
 Which mode it runs in is controlled entirely by environment variables —
 same codebase either way.
@@ -20,8 +21,7 @@ content/models.py       → Project, Experience, Testimonial, SkillOverride
 content/views.py        → site_data() — serializes the DB to JSON
 content/admin.py        → registers the models with Django admin
 media/projects/         → local uploads (dev only — Cloudinary in prod)
-build.sh                → Render's build step (install, collectstatic, migrate)
-Procfile                → Render's start command (gunicorn)
+Procfile                → start command (gunicorn); Railway's service settings mirror it
 .env.example             → every environment variable this project reads
 ```
 
@@ -46,23 +46,10 @@ disk storage automatically — nothing to configure.
 
 ---
 
-## 2. Set up Aiven (Postgres)
+## 2. Set up Cloudinary (image storage)
 
-1. Create a **PostgreSQL** service in Aiven (any plan — the free/starter tier is fine to start).
-2. Once it's running, open the service's **Overview** page and copy the
-   **Service URI** under "Connection information". It looks like:
-   ```
-   postgres://avnadmin:PASSWORD@your-service-name.aivencloud.com:12345/defaultdb?sslmode=require
-   ```
-   Aiven requires SSL — the `sslmode=require` in that URI is expected and
-   this project honors it automatically.
-3. That whole URI is your `DATABASE_URL` — you'll paste it into Render's
-   environment variables in step 4.
-
-You don't need to run migrations against it manually — Render's build step
-(below) does that on every deploy.
-
-## 3. Set up Cloudinary (image storage)
+Railway's disk is wiped on every deploy, so uploaded images must live on
+Cloudinary.
 
 1. Create a free Cloudinary account.
 2. On your Cloudinary **Dashboard**, find **API Environment variable**
@@ -71,69 +58,72 @@ You don't need to run migrations against it manually — Render's build step
    CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
    ```
 3. Copy the whole `cloudinary://...` value (without the `CLOUDINARY_URL=`
-   prefix) — that's what you'll paste into Render as `CLOUDINARY_URL`.
+   prefix) — that's what goes into Railway as `CLOUDINARY_URL`.
 
 Once this is set, every image uploaded through `/admin/` is stored on
 Cloudinary instead of local disk, and `content.image.url` in the API
-response will point straight at Cloudinary's CDN.
+response points straight at Cloudinary's CDN.
 
-## 4. Deploy on Render
+## 3. Deploy on Railway
 
-1. Push this project to a GitHub repo (Render deploys from a repo).
-2. In Render, **New → Web Service**, connect the repo.
-3. Configure:
-   - **Runtime:** Python 3
-   - **Build Command:** `./build.sh`
-   - **Start Command:** `gunicorn portfolio_backend.wsgi:application`
-     (this also lives in `Procfile`, which Render can auto-detect)
-4. Under **Environment**, add these variables:
+The live project is **kim-portfolio** on Railway, with two services:
+**Postgres** (from Railway's Postgres template) and **web** (this repo,
+`main` branch). Every push to `main` deploys automatically.
+
+To recreate it from scratch:
+
+1. **New Project → Deploy PostgreSQL**.
+2. **New → GitHub Repo →** this repo, branch `main`. Railway's builder
+   (Railpack) detects Python from `requirements.txt`.
+3. In the web service's **Settings**:
+   - **Start command:**
+     ```
+     sh -c "python manage.py collectstatic --noinput && gunicorn portfolio_backend.wsgi:application --bind 0.0.0.0:$PORT"
+     ```
+   - **Pre-deploy command** (runs before each deploy, with database access):
+     ```
+     sh -c 'python manage.py migrate --noinput && python manage.py create_admin && if [ -n "$CLOUDINARY_URL" ]; then python manage.py seed_content; else echo "CLOUDINARY_URL not set: skipping seed_content until images have permanent storage"; fi'
+     ```
+     `seed_content` waits for `CLOUDINARY_URL` on purpose: it only seeds
+     projects once, and without Cloudinary their images would be saved to
+     a disk that's thrown away.
+   - **Networking → Generate Domain** for a `*.up.railway.app` address.
+4. Under **Variables**, add:
 
    | Key | Value |
    |---|---|
    | `SECRET_KEY` | generate one — e.g. `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
    | `DEBUG` | `False` |
-   | `DATABASE_URL` | your Aiven Service URI from step 2 |
-   | `CLOUDINARY_URL` | your Cloudinary URL from step 3 |
-   | `ALLOWED_HOSTS` | `your-app-name.onrender.com` (use the hostname Render assigns — you'll see it after the first deploy, or set it after) |
+   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (a reference to the Postgres service) |
+   | `ALLOWED_HOSTS` | your custom domains, comma-separated, e.g. `emmanuelkimathi.dev,www.emmanuelkimathi.dev` |
+   | `CLOUDINARY_URL` | your Cloudinary URL from step 2 |
    | `DJANGO_SUPERUSER_USERNAME` | your chosen admin username |
    | `DJANGO_SUPERUSER_EMAIL` | your email |
    | `DJANGO_SUPERUSER_PASSWORD` | a strong password |
 
-   Render also sets `RENDER_EXTERNAL_HOSTNAME` automatically at runtime —
-   this project already adds it to `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`
-   for you, so the `ALLOWED_HOSTS` variable above is mostly a belt-and-
-   suspenders safety net.
+   The `*.up.railway.app` domain is added to `ALLOWED_HOSTS` automatically
+   (from Railway's `RAILWAY_PUBLIC_DOMAIN`), and every allowed host is
+   trusted for CSRF over HTTPS, so admin logins work on each domain.
 
-5. Deploy. **The free tier has no Shell access**, so `build.sh` does
-   everything a shell session normally would, on every build:
-   installs dependencies, runs `collectstatic`, runs `migrate`, runs
-   `seed_content` (loads your original projects/experience/testimonials —
-   skips if they already exist), and runs `create_admin` (creates the
-   superuser from the `DJANGO_SUPERUSER_*` vars above — skips if that
-   username already exists). All four are safe to re-run on every deploy.
-6. Once live, visit `https://your-app-name.onrender.com/` for the site and
-   `/admin/` to log in with the `DJANGO_SUPERUSER_USERNAME` /
-   `DJANGO_SUPERUSER_PASSWORD` you set — uploads now go to Cloudinary, data
-   to Aiven.
+5. Once live, visit the site and `/admin/` to log in with the
+   `DJANGO_SUPERUSER_*` credentials. You can leave those variables set
+   (`create_admin` skips once the user exists) or remove them after the
+   first deploy — change your password inside `/admin/` first if you do.
 
-   You can leave the `DJANGO_SUPERUSER_*` variables set indefinitely (each
-   build just confirms the user already exists and moves on), or remove
-   them after the first successful deploy if you'd rather not keep the
-   password sitting in an env var — just change your password from inside
-   `/admin/` first if you do.
+### Custom domain
+
+The service has `emmanuelkimathi.dev` and `www.emmanuelkimathi.dev`
+attached under **Settings → Networking**. Railway shows the exact DNS
+records to add at your DNS provider for each one: a `CNAME` for the
+traffic and a `_railway-verify` `TXT` record for ownership. A `CNAME` on
+the bare (apex) domain needs a DNS provider that supports CNAME
+flattening or `ALIAS` records (e.g. Cloudflare). Railway issues the HTTPS
+certificate once the records resolve.
 
 ### Redeploys
-Every subsequent push to your connected branch re-runs `build.sh` (install →
-collectstatic → migrate → seed_content → create_admin) and restarts
-gunicorn. All four management commands are idempotent, so this stays safe
-and shell-free on every deploy — no manual steps for routine content or
-code changes.
-
-### A couple of free-tier things worth knowing
-- No Shell access is exactly why `seed_content` and `create_admin` run
-  inside `build.sh` instead of being one-off commands you'd run by hand.
-- Free-tier services spin down after periods of inactivity and take a
-  few seconds to wake back up on the next request — normal, not a bug.
+Every push to `main` rebuilds, runs the pre-deploy command (migrate →
+create_admin → seed_content) and restarts gunicorn. All three management
+commands are idempotent, so this is safe on every deploy.
 
 ---
 
@@ -145,22 +135,23 @@ See `.env.example` for the full list with example values. Summary:
 |---|---|---|
 | `SECRET_KEY` | Yes in prod | Django's cryptographic signing key |
 | `DEBUG` | No (defaults `True`) | Set `False` in production |
-| `ALLOWED_HOSTS` | Yes in prod | Comma-separated hostnames allowed to serve the app |
-| `DATABASE_URL` | No (defaults to SQLite) | Aiven Postgres connection string |
+| `ALLOWED_HOSTS` | Yes for custom domains | Comma-separated hostnames allowed to serve the app (also trusted for CSRF) |
+| `CSRF_TRUSTED_ORIGINS` | No | Extra origins to trust beyond `ALLOWED_HOSTS` |
+| `DATABASE_URL` | No (defaults to SQLite) | Postgres connection string |
 | `CLOUDINARY_URL` | No (defaults to local disk) | Cloudinary connection string |
-| `DJANGO_SUPERUSER_USERNAME` / `_EMAIL` / `_PASSWORD` | No | Used by `create_admin` in `build.sh` to create your admin login without shell access |
-| `RENDER_EXTERNAL_HOSTNAME` | Set by Render automatically | Used to fill in `ALLOWED_HOSTS`/CSRF trust |
+| `DJANGO_SUPERUSER_USERNAME` / `_EMAIL` / `_PASSWORD` | No | Used by `create_admin` (pre-deploy) to create your admin login |
+| `RAILWAY_PUBLIC_DOMAIN` | Set by Railway automatically | Added to `ALLOWED_HOSTS`/CSRF trust |
 
 ## Notes on what changed for this setup
 - `settings.py` now reads all of the above from the environment via
   `os.environ`, with `dj-database-url` parsing `DATABASE_URL` and forcing
-  SSL (`ssl_require=True`) since Aiven requires it.
+  SSL (`ssl_require=True`).
 - Static files (`styles.css`, `script.js`, `assets/`) are served directly
   by **WhiteNoise** — no separate static host needed.
 - Media (project screenshots) use `django-cloudinary-storage`'s
   `MediaCloudinaryStorage` backend when `CLOUDINARY_URL` is set, and plain
   local disk storage otherwise — so local dev never touches Cloudinary.
-- `SECURE_SSL_REDIRECT` turns on automatically once `DEBUG=False`. Render
+- `SECURE_SSL_REDIRECT` turns on automatically once `DEBUG=False`. Railway
   terminates TLS at its proxy and forwards HTTP internally, so
-  `SECURE_PROXY_SSL_HEADER` is set to trust Render's
+  `SECURE_PROXY_SSL_HEADER` is set to trust the proxy's
   `X-Forwarded-Proto` header — without it you'd get a redirect loop.
