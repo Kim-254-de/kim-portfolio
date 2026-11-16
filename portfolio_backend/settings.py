@@ -40,9 +40,10 @@ ALLOWED_HOSTS = [
     h.strip() for h in os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()
 ]
 
-# Railway sets this at runtime to the service's *.up.railway.app domain, so
-# that address always works without listing it in ALLOWED_HOSTS. Custom
-# domains (e.g. emmanuelkimathi.dev) still go in ALLOWED_HOSTS.
+# Railway sets this at runtime to the service's public domain. Once custom
+# domains are attached it may point at one of those instead of the
+# *.up.railway.app address, so list every hostname you serve (including the
+# railway.app one) in ALLOWED_HOSTS; this is only a fallback.
 RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
 if RAILWAY_PUBLIC_DOMAIN:
     ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)

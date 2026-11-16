@@ -5,7 +5,7 @@ admin (with login), and project screenshots are uploaded as real files.
 This version is set up to run:
 - **locally** with SQLite + local file storage — no accounts or env vars needed, or
 - **in production** on **Railway** (app + Postgres), with images on **Cloudinary**.
-  Live at https://emmanuelkimathi.dev (Railway address:
+  Live at https://emmanuel-kimathi.tech (Railway address:
   https://web-production-0d7452f0.up.railway.app).
 
 Which mode it runs in is controlled entirely by environment variables —
@@ -95,15 +95,17 @@ To recreate it from scratch:
    | `SECRET_KEY` | generate one — e.g. `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
    | `DEBUG` | `False` |
    | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (a reference to the Postgres service) |
-   | `ALLOWED_HOSTS` | your custom domains, comma-separated, e.g. `emmanuelkimathi.dev,www.emmanuelkimathi.dev` |
+   | `ALLOWED_HOSTS` | every hostname the site answers on, comma-separated: `web-production-0d7452f0.up.railway.app,emmanuel-kimathi.tech,www.emmanuel-kimathi.tech` |
    | `CLOUDINARY_URL` | your Cloudinary URL from step 2 |
    | `DJANGO_SUPERUSER_USERNAME` | your chosen admin username |
    | `DJANGO_SUPERUSER_EMAIL` | your email |
    | `DJANGO_SUPERUSER_PASSWORD` | a strong password |
 
-   The `*.up.railway.app` domain is added to `ALLOWED_HOSTS` automatically
-   (from Railway's `RAILWAY_PUBLIC_DOMAIN`), and every allowed host is
-   trusted for CSRF over HTTPS, so admin logins work on each domain.
+   List the `*.up.railway.app` address explicitly: Railway's
+   `RAILWAY_PUBLIC_DOMAIN` can switch to a custom domain once one is
+   attached, and any hostname missing from `ALLOWED_HOSTS` gets a 400.
+   Every allowed host is trusted for CSRF over HTTPS, so admin logins work
+   on each domain.
 
 5. Once live, visit the site and `/admin/` to log in with the
    `DJANGO_SUPERUSER_*` credentials. You can leave those variables set
@@ -112,7 +114,7 @@ To recreate it from scratch:
 
 ### Custom domain
 
-The service has `emmanuelkimathi.dev` and `www.emmanuelkimathi.dev`
+The service has `emmanuel-kimathi.tech` and `www.emmanuel-kimathi.tech`
 attached under **Settings → Networking**. Railway shows the exact DNS
 records to add at your DNS provider for each one: a `CNAME` for the
 traffic and a `_railway-verify` `TXT` record for ownership. A `CNAME` on
@@ -140,7 +142,7 @@ See `.env.example` for the full list with example values. Summary:
 | `DATABASE_URL` | No (defaults to SQLite) | Postgres connection string |
 | `CLOUDINARY_URL` | No (defaults to local disk) | Cloudinary connection string |
 | `DJANGO_SUPERUSER_USERNAME` / `_EMAIL` / `_PASSWORD` | No | Used by `create_admin` (pre-deploy) to create your admin login |
-| `RAILWAY_PUBLIC_DOMAIN` | Set by Railway automatically | Added to `ALLOWED_HOSTS`/CSRF trust |
+| `RAILWAY_PUBLIC_DOMAIN` | Set by Railway automatically | Fallback addition to `ALLOWED_HOSTS`/CSRF trust |
 
 ## Notes on what changed for this setup
 - `settings.py` now reads all of the above from the environment via
