@@ -7,3 +7,5 @@ media/projects/*
 .DS_Store
 .env
 staticfiles/
+media/nganya/
+media/certifications/

@@ -4,219 +4,313 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futuristic Portfolio</title>
+  <meta name="description" content="Kim Eddy — full-stack and AI engineer from Kenya. Route 254: reliable, scalable systems that move people forward." />
+  <meta name="theme-color" content="#121810" />
+  <title>Kim Eddy · Route 254</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=DotGothic16&family=Figtree:wght@400;500;600;700&family=Lobster&family=Permanent+Marker&display=swap">
   <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
 
-  <!-- ======== HERO SECTION ======== -->
-  <header>
-  <nav class="navbar">
-    <div class="logo">
-      <img src="{% static 'assets/logo.png' %}" alt="Logo">
-    </div>
-
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-      <span class="hamburger" aria-hidden="true"></span>
-    </button>
-
-    <ul class="nav-links">
-      <li><a href="#hero">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#achievements">Achievements</a></li>
-      <li><a href="#talks">Talks</a></li>
-      <li><a href="#certifications">Certifications</a></li>
-      <li><a href="#testimonials">Testimonials</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-  
-  <!-- Terminal-style hero -->
-  <div id="hero" class="hero">
-    <!-- animated particles background -->
-    <canvas id="particles-canvas" class="particles-bg" aria-hidden="true"></canvas>
-
-    <div class="hero-overlay">
-      <div class="terminal" role="region" aria-label="Interactive terminal" aria-live="polite">
-      <div class="term-bar" aria-hidden="true">
-        <span class="dot red"></span>
-        <span class="dot amber"></span>
-        <span class="dot green"></span>
-      </div>
-      <div class="term-body">
-        <div class="term-lines" id="term-lines">
-          <!-- Lines will be typed here by JS -->
-        </div>
-
-        <!-- Interactive prompt (disabled during intro typing) -->
-        <div class="term-prompt" id="term-prompt">
-          <span class="prompt-label">kimeddy@portfolio:~$</span>
-          <input type="text"
-                 id="term-input"
-                 class="term-input"
-                 aria-label="Terminal command input"
-                 autocomplete="off"
-                 autocorrect="off"
-                 autocapitalize="off"
-                 spellcheck="false"
-                 disabled>
-        </div>
-
-        <div class="term-caret" id="term-caret" aria-hidden="true">▌</div>
-      </div>
-    </div>
-
-    <!-- Social links below terminal -->
-    <div class="hero-socials">
-      <a href="https://github.com/Kim-254-de" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-      </a>
-      <a href="https://www.linkedin.com/in/kimathi-emmanuel-33445433b/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
-        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
-        </svg>
-      </a>
-      <a href="https://wa.me/254707185700" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
-  <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20.52 3.48A11.86 11.86 0 0 0 12.05 0C5.45 0 .11 5.34.11 11.93c0 2.1.55 4.15 1.6 5.97L0 24l6.29-1.64a12.02 12.02 0 0 0 5.76 1.47h.01c6.6 0 12.05-5.34 12.05-11.93 0-3.18-1.25-6.17-3.39-8.42zM12.05 21.54c-1.87 0-3.7-.5-5.29-1.44l-.38-.23-3.73.97 1-3.63-.25-.39A9.93 9.93 0 0 1 2.11 11.93C2.11 6.64 6.76 2 12.05 2c2.68 0 5.2 1.04 7.09 2.93a9.92 9.92 0 0 1 2.93 7c0 5.29-4.65 9.61-10.02 9.61zm5.12-7.4c-.28-.14-1.64-.81-1.9-.9-.26-.1-.45-.14-.63.14-.19.28-.72.9-.88 1.09-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.64-1.55-1.92-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.19-.28.28-.47.09-.19.05-.36-.02-.5-.07-.14-.63-1.52-.86-2.09-.23-.55-.47-.47-.63-.48h-.54c-.19 0-.5.07-.76.36-.26.28-1 1-.97 2.43.02 1.43 1.05 2.83 1.2 3.02.14.19 2.06 3.14 5 4.41.7.3 1.25.48 1.67.62.7.22 1.33.19 1.83.12.56-.08 1.64-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.12-.26-.19-.54-.33z"/>
+  <!-- "Route Kim": our own nganya, drawn here once. The route map uses it as-is;
+       the hero clones its layers so the body, wheels and lights can dance (manyoka). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="ng-paint" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff7a2e"/><stop offset=".55" stop-color="#f2441a"/><stop offset="1" stop-color="#c8300c"/>
+      </linearGradient>
+      <linearGradient id="ng-glass" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3d4f58"/><stop offset="1" stop-color="#0c1316"/>
+      </linearGradient>
+      <linearGradient id="ng-beam-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff6c2" stop-opacity=".75"/><stop offset="1" stop-color="#fff6c2" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="ng-glow-grad">
+        <stop offset="0" stop-color="#ff3f9e" stop-opacity=".9"/><stop offset=".6" stop-color="#29e0ee" stop-opacity=".35"/><stop offset="1" stop-color="#29e0ee" stop-opacity="0"/>
+      </radialGradient>
+      <pattern id="ng-hazard" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="12" height="12" fill="#ffc61f"/><rect width="6" height="12" fill="#d6151b"/>
+      </pattern>
+      <clipPath id="ng-clip"><path d="M30 58 Q30 38 50 38 H548 Q566 38 578 54 L612 112 Q624 124 624 142 V194 Q624 206 612 206 H545 A40 40 0 0 0 465 206 H190 A40 40 0 0 0 110 206 H40 Q26 206 26 192 Z"/></clipPath>
+    </defs>
+    <symbol id="nganya-svg" viewBox="0 -70 660 330">
+      <ellipse class="ng-shadow" cx="330" cy="244" rx="300" ry="9" fill="#000" opacity=".22"/>
+      <ellipse class="ng-glow" cx="330" cy="236" rx="300" ry="16" fill="url(#ng-glow-grad)"/>
+      <path class="ng-beam" d="M628 150 L660 118 V200 Z" fill="url(#ng-beam-grad)"/>
+      <g class="ng-body">
+        <g class="ng-flag">
+          <line x1="70" y1="26" x2="70" y2="-64" stroke="#d9dcdf" stroke-width="3" stroke-linecap="round"/>
+          <g class="ng-flag-cloth">
+            <rect x="71" y="-62" width="66" height="13" fill="#121212"/>
+            <rect x="71" y="-49" width="66" height="2.5" fill="#fff"/>
+            <rect x="71" y="-46.5" width="66" height="13" fill="#c8102e"/>
+            <rect x="71" y="-33.5" width="66" height="2.5" fill="#fff"/>
+            <rect x="71" y="-31" width="66" height="13" fill="#1e7a34"/>
+            <ellipse cx="104" cy="-40" rx="6" ry="13" fill="#c8102e" stroke="#121212" stroke-width="2"/>
+          </g>
+        </g>
+        <path d="M40 38 L46 22 H556 L566 38 Z" fill="#b5280a"/>
+        <g class="ng-leds" fill="#ff2b2b"><circle cx="62" cy="31" r="2.6"/><circle cx="76" cy="31" r="2.6"/><circle cx="90" cy="31" r="2.6"/><circle cx="104" cy="31" r="2.6"/><circle cx="118" cy="31" r="2.6"/><circle cx="132" cy="31" r="2.6"/><circle cx="146" cy="31" r="2.6"/><circle cx="160" cy="31" r="2.6"/><circle cx="174" cy="31" r="2.6"/><circle cx="188" cy="31" r="2.6"/><circle cx="202" cy="31" r="2.6"/><circle cx="216" cy="31" r="2.6"/><circle cx="230" cy="31" r="2.6"/><circle cx="244" cy="31" r="2.6"/><circle cx="258" cy="31" r="2.6"/><circle cx="272" cy="31" r="2.6"/><circle cx="286" cy="31" r="2.6"/><circle cx="300" cy="31" r="2.6"/><circle cx="314" cy="31" r="2.6"/><circle cx="328" cy="31" r="2.6"/><circle cx="342" cy="31" r="2.6"/><circle cx="356" cy="31" r="2.6"/><circle cx="370" cy="31" r="2.6"/><circle cx="384" cy="31" r="2.6"/><circle cx="398" cy="31" r="2.6"/><circle cx="412" cy="31" r="2.6"/><circle cx="426" cy="31" r="2.6"/><circle cx="440" cy="31" r="2.6"/><circle cx="454" cy="31" r="2.6"/><circle cx="468" cy="31" r="2.6"/><circle cx="482" cy="31" r="2.6"/><circle cx="496" cy="31" r="2.6"/><circle cx="510" cy="31" r="2.6"/><circle cx="524" cy="31" r="2.6"/><circle cx="538" cy="31" r="2.6"/></g>
+        <g class="ng-nameplate">
+          <rect x="384" y="-6" width="182" height="30" rx="8" fill="#121810" stroke="#f1f1ee" stroke-width="2"/>
+          <text class="ng-txt" x="475" y="16" text-anchor="middle" font-family="Lobster, 'Permanent Marker', cursive" font-size="22" fill="#fff" stroke="#ff3f9e" stroke-width=".8" paint-order="stroke">Route Kim</text>
+        </g>
+        <path d="M30 58 Q30 38 50 38 H548 Q566 38 578 54 L612 112 Q624 124 624 142 V194 Q624 206 612 206 H545 A40 40 0 0 0 465 206 H190 A40 40 0 0 0 110 206 H40 Q26 206 26 192 Z" fill="url(#ng-paint)"/>
+        <g clip-path="url(#ng-clip)" fill="none"><path d="M230 236 C380 216 500 176 630 120" transform="translate(0 -15)" stroke="#121212" stroke-width="10"/><path d="M230 236 C380 216 500 176 630 120" transform="translate(0 -8)" stroke="#fff" stroke-width="4"/><path d="M230 236 C380 216 500 176 630 120" transform="translate(0 0)" stroke="#c8102e" stroke-width="11"/><path d="M230 236 C380 216 500 176 630 120" transform="translate(0 8)" stroke="#fff" stroke-width="4"/><path d="M230 236 C380 216 500 176 630 120" transform="translate(0 15)" stroke="#1e7a34" stroke-width="10"/>
+          <rect x="26" y="128" width="22" height="80" fill="url(#ng-hazard)"/>
+          <rect x="20" y="166" width="620" height="3" fill="#ffc61f" opacity=".9"/>
+        </g>
+        <path d="M552 48 Q566 48 574 60 L606 114 H552 Z" fill="url(#ng-glass)" stroke="#121810" stroke-width="3"/>
+        <g fill="url(#ng-glass)" stroke="#121810" stroke-width="3">
+          <rect x="312" y="52" width="70" height="60" rx="5"/>
+          <rect x="390" y="52" width="70" height="60" rx="5"/>
+          <rect x="474" y="52" width="66" height="60" rx="5"/>
+        </g>
+        <g class="ng-riders" fill="#060a0b" opacity=".85">
+          <circle cx="336" cy="86" r="9"/><path d="M320 112 Q336 94 352 112 Z"/>
+          <circle cx="425" cy="84" r="9"/><path d="M409 112 Q425 92 441 112 Z"/>
+          <circle cx="572" cy="84" r="8"/><path d="M558 112 Q572 94 588 112 Z"/>
+        </g>
+        <rect x="470" y="48" width="74" height="152" rx="4" fill="none" stroke="#9a2207" stroke-width="2.5"/>
+        <rect x="532" y="132" width="5" height="24" rx="2" fill="#e9ecee"/>
+        <g class="ng-art">
+          <rect x="44" y="48" width="256" height="112" rx="10" fill="#141414" stroke="#121810" stroke-width="3"/>
+          <circle cx="86" cy="80" r="26" fill="#ff3f9e" opacity=".55"/>
+          <circle cx="246" cy="128" r="30" fill="#29e0ee" opacity=".4"/>
+          <circle cx="200" cy="70" r="14" fill="#ffc61f" opacity=".55"/>
+          <path d="M60 150 l4 -14 l4 14 l-4 6z M262 64 l3 -10 l3 10 l-3 4z" fill="#ffc61f"/>
+          <path d="M150 158 v10 a3 3 0 0 0 6 0 v-10z M210 158 v14 a3 3 0 0 0 6 0 v-14z M100 158 v7 a3 3 0 0 0 6 0 v-7z" fill="#ff3f9e"/>
+          <path d="M226 58 l8 -10 l8 10 l8 -10 l8 10 v8 h-32z" fill="#ffc61f" stroke="#121212" stroke-width="1.5"/>
+          <g transform="rotate(-6 64 98)"><text class="ng-txt" x="64" y="98" font-family="'Permanent Marker', cursive" font-size="34" fill="#fff">Am I</text></g>
+          <g transform="rotate(-6 92 146)"><text class="ng-txt" x="92" y="146" font-family="'Permanent Marker', cursive" font-size="46" fill="#ff3f9e" stroke="#fff" stroke-width="1.6" paint-order="stroke">Extra?</text></g>
+          <text class="ng-txt" x="262" y="152" text-anchor="middle" font-family="'Permanent Marker', cursive" font-size="14" fill="#29e0ee">&lt;/&gt;</text>
+        </g>
+        <path class="ng-neon" d="M30 178 H620" stroke="#ff3f9e" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <g fill="#e9ecee"><circle cx="202" cy="192" r="2.4"/><circle cx="213" cy="192" r="2.4"/><circle cx="224" cy="192" r="2.4"/><circle cx="235" cy="192" r="2.4"/><circle cx="246" cy="192" r="2.4"/><circle cx="257" cy="192" r="2.4"/><circle cx="268" cy="192" r="2.4"/><circle cx="279" cy="192" r="2.4"/><circle cx="290" cy="192" r="2.4"/><circle cx="301" cy="192" r="2.4"/><circle cx="312" cy="192" r="2.4"/><circle cx="323" cy="192" r="2.4"/><circle cx="334" cy="192" r="2.4"/><circle cx="345" cy="192" r="2.4"/><circle cx="356" cy="192" r="2.4"/><circle cx="367" cy="192" r="2.4"/><circle cx="378" cy="192" r="2.4"/><circle cx="389" cy="192" r="2.4"/><circle cx="400" cy="192" r="2.4"/><circle cx="411" cy="192" r="2.4"/><circle cx="422" cy="192" r="2.4"/><circle cx="433" cy="192" r="2.4"/><circle cx="444" cy="192" r="2.4"/><circle cx="455" cy="192" r="2.4"/><circle cx="50" cy="192" r="2.4"/><circle cx="61" cy="192" r="2.4"/><circle cx="72" cy="192" r="2.4"/><circle cx="83" cy="192" r="2.4"/><circle cx="94" cy="192" r="2.4"/></g>
+        <path d="M190 206 H465 V214 Q465 219 459 219 H196 Q190 219 190 214 Z M545 206 H626 Q632 206 632 213 V219 H545 Z M26 206 H110 V219 H30 Q24 219 24 213 Z" fill="#9a2207"/>
+        <rect x="196" y="210" width="262" height="2" fill="#e9ecee" opacity=".8"/>
+        <rect class="ng-tail" x="26" y="108" width="9" height="18" rx="2" fill="#ff2a2a"/>
+        <path class="ng-head" d="M612 146 H626 V160 H612 Q608 153 612 146 Z" fill="#fff6c2"/>
+        <rect x="614" y="168" width="12" height="5" rx="2" fill="#ffc61f"/>
+        <path d="M600 92 L626 76" stroke="#121810" stroke-width="3"/>
+        <rect x="622" y="64" width="10" height="22" rx="3" fill="#121810"/>
+      </g>
+      <g class="ng-wheel ng-wheel-rear"><circle cx="150" cy="212" r="30" fill="#0b0d0c"/><circle cx="150" cy="212" r="26" fill="none" stroke="#2a2d2b" stroke-width="2"/><circle cx="150" cy="212" r="19" fill="#d6151b" stroke="#f1f1ee" stroke-width="2"/><g fill="#121212"><rect x="147.8" y="194" width="4.4" height="14" rx="2" transform="rotate(0 150 212)"/><rect x="147.8" y="194" width="4.4" height="14" rx="2" transform="rotate(72 150 212)"/><rect x="147.8" y="194" width="4.4" height="14" rx="2" transform="rotate(144 150 212)"/><rect x="147.8" y="194" width="4.4" height="14" rx="2" transform="rotate(216 150 212)"/><rect x="147.8" y="194" width="4.4" height="14" rx="2" transform="rotate(288 150 212)"/></g><circle cx="150" cy="212" r="5.5" fill="#e9ecee"/></g>
+      <g class="ng-wheel ng-wheel-front"><circle cx="505" cy="212" r="30" fill="#0b0d0c"/><circle cx="505" cy="212" r="26" fill="none" stroke="#2a2d2b" stroke-width="2"/><circle cx="505" cy="212" r="19" fill="#d6151b" stroke="#f1f1ee" stroke-width="2"/><g fill="#121212"><rect x="502.8" y="194" width="4.4" height="14" rx="2" transform="rotate(0 505 212)"/><rect x="502.8" y="194" width="4.4" height="14" rx="2" transform="rotate(72 505 212)"/><rect x="502.8" y="194" width="4.4" height="14" rx="2" transform="rotate(144 505 212)"/><rect x="502.8" y="194" width="4.4" height="14" rx="2" transform="rotate(216 505 212)"/><rect x="502.8" y="194" width="4.4" height="14" rx="2" transform="rotate(288 505 212)"/></g><circle cx="505" cy="212" r="5.5" fill="#e9ecee"/></g>
+    </symbol>
   </svg>
-</a>
 
-      <a href="mailto:kimeddy@gmail.com" aria-label="Email" title="Email">
-        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
+  <!-- ======== ROUTE BOARD (NAV) ======== -->
+  <header class="site-header">
+    <nav class="route-board" aria-label="Main">
+      <a class="route-no" href="#hero" aria-label="Kim Eddy, back to top">
+        <img src="{% static 'assets/logo.png' %}" alt="" class="route-logo">
+        <b>254</b>
+        <span>KIMEDDY ▸ THE WEB</span>
       </a>
-    </div>
 
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator" id="scroll-indicator">
-      <span>Scroll down</span>
-      <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#talks">Talks</a></li>
+        <li><a href="#certifications">Certs</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+  <!-- ======== HERO ======== -->
+  <section id="hero" class="hero" aria-labelledby="hero-title">
+    <!-- Manyoka: the nganya dances across the hero, behind the text (static/script.js) -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="nganya-stage" id="nganya-stage">
+        <div class="nganya-road"></div>
+        <div class="nganya-track" id="nganya-track">
+          <div class="nganya-car" id="nganya-car">
+            <svg class="nganya" id="nganya" viewBox="0 -70 660 330"><use href="#nganya-svg"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="container hero-grid">
+      <div class="led-sign" role="img" aria-label="Destination sign: Tharaka to Nairobi to the web. Full-stack, AI, systems.">
+        <div class="track" aria-hidden="true">
+          <span>THARAKA ▸ NAIROBI ▸ THE WEB</span><span>PANDA SASA · SEATS AVAILABLE</span><span>FULL-STACK · AI · SYSTEMS</span>
+          <span>THARAKA ▸ NAIROBI ▸ THE WEB</span><span>PANDA SASA · SEATS AVAILABLE</span><span>FULL-STACK · AI · SYSTEMS</span>
+        </div>
+      </div>
+
+      <div class="hero-copy">
+        <p class="eyebrow">Kim Eddy · Full-stack &amp; AI engineer</p>
+        <h1 id="hero-title">I build systems that <em>move people</em> forward.</h1>
+        <p class="lede">Reliable, scalable and AI-driven software, from personalized learning platforms to secure e-voting and farmer marketplaces. Built in Kenya, made to carry real load.</p>
+        <div class="cta-row">
+          <a class="btn btn-panda" href="#projects">Panda: see projects</a>
+          <a class="btn btn-ghost" href="#contact">Book a ride</a>
+        </div>
+        <div class="hero-socials">
+          <a href="https://github.com/Kim-254-de" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="https://www.linkedin.com/in/kimathi-emmanuel-33445433b/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/254707185700" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+      <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20.52 3.48A11.86 11.86 0 0 0 12.05 0C5.45 0 .11 5.34.11 11.93c0 2.1.55 4.15 1.6 5.97L0 24l6.29-1.64a12.02 12.02 0 0 0 5.76 1.47h.01c6.6 0 12.05-5.34 12.05-11.93 0-3.18-1.25-6.17-3.39-8.42zM12.05 21.54c-1.87 0-3.7-.5-5.29-1.44l-.38-.23-3.73.97 1-3.63-.25-.39A9.93 9.93 0 0 1 2.11 11.93C2.11 6.64 6.76 2 12.05 2c2.68 0 5.2 1.04 7.09 2.93a9.92 9.92 0 0 1 2.93 7c0 5.29-4.65 9.61-10.02 9.61zm5.12-7.4c-.28-.14-1.64-.81-1.9-.9-.26-.1-.45-.14-.63.14-.19.28-.72.9-.88 1.09-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.64-1.55-1.92-.16-.28-.02-.43.12-.57.12-.12.28-.32.42-.48.14-.16.19-.28.28-.47.09-.19.05-.36-.02-.5-.07-.14-.63-1.52-.86-2.09-.23-.55-.47-.47-.63-.48h-.54c-.19 0-.5.07-.76.36-.26.28-1 1-.97 2.43.02 1.43 1.05 2.83 1.2 3.02.14.19 2.06 3.14 5 4.41.7.3 1.25.48 1.67.62.7.22 1.33.19 1.83.12.56-.08 1.64-.67 1.88-1.32.23-.65.23-1.21.16-1.32-.07-.12-.26-.19-.54-.33z"/>
       </svg>
+    </a>
+
+          <a href="mailto:kimeddy@gmail.com" aria-label="Email" title="Email">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Makanga console (interactive terminal) -->
+      <div class="terminal makanga" role="region" aria-label="Interactive terminal" aria-live="polite">
+        <div class="term-bar" aria-hidden="true">
+          <span>MAKANGA CONSOLE</span><span>R·254</span>
+        </div>
+        <div class="term-body">
+          <div class="term-lines" id="term-lines"></div>
+          <div class="term-prompt" id="term-prompt">
+            <span class="prompt-label">makanga@route254:~$</span>
+            <input type="text"
+                   id="term-input"
+                   class="term-input"
+                   aria-label="Terminal command input"
+                   autocomplete="off"
+                   autocorrect="off"
+                   autocapitalize="off"
+                   spellcheck="false"
+                   disabled>
+          </div>
+          <div class="term-caret" id="term-caret" aria-hidden="true">▌</div>
+        </div>
+      </div>
+
+      <!-- Route map: every section is a stage on the route -->
+      <nav class="route-map" id="route-map" aria-label="Route stages">
+        <div class="route-scroll">
+          <div class="route-road" aria-hidden="true">
+            <svg class="route-bus"><use href="#nganya-svg"/></svg>
+          </div>
+          <ol class="route-stops">
+            <li><a href="#about"><span class="stop-no">01</span><span class="stop-name">About</span></a></li>
+            <li><a href="#skills"><span class="stop-no">02</span><span class="stop-name">Skills</span></a></li>
+            <li><a href="#projects"><span class="stop-no">03</span><span class="stop-name">Projects</span></a></li>
+            <li><a href="#experience"><span class="stop-no">04</span><span class="stop-name">Experience</span></a></li>
+            <li><a href="#achievements"><span class="stop-no">05</span><span class="stop-name">Achievements</span></a></li>
+            <li><a href="#talks"><span class="stop-no">06</span><span class="stop-name">Talks</span></a></li>
+            <li><a href="#certifications"><span class="stop-no">07</span><span class="stop-name">Certs</span></a></li>
+            <li><a href="#testimonials"><span class="stop-no">08</span><span class="stop-name">Testimonials</span></a></li>
+            <li><a href="#contact"><span class="stop-no">✦</span><span class="stop-name">Terminus</span></a></li>
+          </ol>
+        </div>
+      </nav>
+
     </div>
-  </div>
+  </section>
 
-  <!-- Scroll to top button -->
-  <button class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M12 19V5M5 12l7-7 7 7"/>
-    </svg>
-  </button>
-</header>
-
-
-
-  
-  <!-- ======== ABOUT SECTION ======== -->
+  <!-- ======== ABOUT ======== -->
   <section id="about">
     <div class="container">
-      <h2>About Me</h2>
+      <div class="stage-head"><span class="stage-plate">STAGE 01</span><h2>About Me</h2><span class="road" aria-hidden="true"></span></div>
 
-      <!-- Profile section with image and intro -->
       <div class="about-profile">
         <div class="profile-image-wrapper">
           <img src="{% static 'assets/profile.png' %}" alt="Profile photo of Kim Eddy" class="profile-image">
         </div>
         <div class="about-intro">
-          <p>
-
-I build reliable, scalable, and AI-driven systems that solve real problems. My work focuses on creating clean, high-impact technology—from personalized learning platforms to secure digital services and smart network solutions.
-
-My brand is simple: clarity, efficiency, and purposeful engineering. Every project I take on is designed to be practical, accessible, and future-ready.
-</p>
+          <p>I build reliable, scalable, and AI-driven systems that solve real problems. My work focuses on creating clean, high-impact technology—from personalized learning platforms to secure digital services and smart network solutions.</p>
+          <p>My brand is simple: clarity, efficiency, and purposeful engineering. Every project I take on is designed to be practical, accessible, and future-ready.</p>
         </div>
       </div>
 
-      <!-- Stats / Highlights -->
       <div class="about-stats">
-        <div class="stat-card">
-          <div class="stat-number">2+</div>
-          <div class="stat-label">Years Experience</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">20+</div>
-          <div class="stat-label">Projects Completed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">15+</div>
-          <div class="stat-label">Happy Clients</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">10+</div>
-          <div class="stat-label">Tech Stack</div>
-        </div>
+        <div class="stat-card"><div class="stat-number">2+</div><div class="stat-label">Years on the road</div></div>
+        <div class="stat-card"><div class="stat-number">20+</div><div class="stat-label">Projects delivered</div></div>
+        <div class="stat-card"><div class="stat-number">15+</div><div class="stat-label">Happy clients</div></div>
+        <div class="stat-card"><div class="stat-number">10+</div><div class="stat-label">Tools in the stack</div></div>
       </div>
 
-      <!-- Journey / Timeline -->
       <div class="about-journey">
         <h3>My Journey</h3>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
+        <ol class="timeline">
+          <li class="timeline-item">
+            <span class="timeline-marker" aria-hidden="true"></span>
             <div class="timeline-content">
-              <h4>Started Web Development</h4>
               <p class="timeline-year">2023</p>
+              <h4>Started Web Development</h4>
               <p>Began my journey with front-end development and quickly fell in love with creating beautiful, functional interfaces.</p>
             </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-marker" aria-hidden="true"></span>
             <div class="timeline-content">
-              <h4>Expanded to Full-Stack</h4>
               <p class="timeline-year">2024</p>
+              <h4>Expanded to Full-Stack</h4>
               <p>Deepened my skills in backend development, databases, and DevOps to become a well-rounded full-stack engineer.</p>
             </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-marker" aria-hidden="true"></span>
             <div class="timeline-content">
-              <h4>Launched Open Source</h4>
               <p class="timeline-year">2025</p>
+              <h4>Launched Open Source</h4>
               <p>Started contributing to open source and building tools that help other developers. Community has been incredible.</p>
             </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-marker"></div>
+          </li>
+          <li class="timeline-item is-current">
+            <span class="timeline-marker" aria-hidden="true"></span>
             <div class="timeline-content">
-              <h4>Today</h4>
-              <p class="timeline-year">2025</p>
+              <p class="timeline-year">Today</p>
+              <h4>Building what's next</h4>
               <p>Building innovative solutions with a focus on scalability, performance, and user experience. Always learning.</p>
             </div>
-          </div>
-        </div>
+          </li>
+        </ol>
       </div>
 
-      <!-- Fun facts or values -->
       <div class="about-values">
         <h3>What Drives Me</h3>
         <div class="values-grid">
           <div class="value-card">
-            <div class="value-icon icon-rocket"></div>
+            <span class="value-icon" aria-hidden="true">▲</span>
             <h4>Innovation</h4>
             <p>I love exploring cutting-edge technologies and finding creative solutions to complex problems.</p>
           </div>
           <div class="value-card">
-            <div class="value-icon icon-handshake"></div>
+            <span class="value-icon" aria-hidden="true">◆</span>
             <h4>Collaboration</h4>
             <p>Great things happen when talented people work together. I thrive in team environments and value open communication.</p>
           </div>
           <div class="value-card">
-            <div class="value-icon icon-books"></div>
+            <span class="value-icon" aria-hidden="true">●</span>
             <h4>Continuous Learning</h4>
             <p>The tech landscape evolves fast. I'm committed to staying current and sharing knowledge with others.</p>
           </div>
           <div class="value-card">
-            <div class="value-icon icon-spark"></div>
+            <span class="value-icon" aria-hidden="true">✦</span>
             <h4>User Experience</h4>
             <p>Behind every line of code is a user. I design with empathy and build with intention.</p>
           </div>
@@ -225,11 +319,11 @@ My brand is simple: clarity, efficiency, and purposeful engineering. Every proje
     </div>
   </section>
 
-  <!-- ======== SKILLS SECTION ======== -->
+  <!-- ======== SKILLS ======== -->
   <section id="skills">
     <div class="container">
-      <h2>Skills</h2>
-      <p class="skills-intro">A concise overview of technologies I use and how proficient I am with each. Click a skill to see projects that use it.</p>
+      <div class="stage-head"><span class="stage-plate">STAGE 02</span><h2>Skills</h2><span class="road" aria-hidden="true"></span></div>
+      <p class="section-intro">The tools I work with, pulled from the tech on my projects. Tap a skill to see the projects that use it.</p>
 
       <div class="skills-controls" id="skills-controls" role="tablist" aria-label="Skill categories">
         <button class="filter-btn active" data-filter="All" role="tab" aria-selected="true">All</button>
@@ -242,113 +336,115 @@ My brand is simple: clarity, efficiency, and purposeful engineering. Every proje
     </div>
   </section>
 
-  <!-- ======== PROJECTS SECTION ======== -->
+  <!-- ======== PROJECTS ======== -->
   <section id="projects">
     <div class="container">
-      <h2>Projects</h2>
-
+      <div class="stage-head"><span class="stage-plate">STAGE 03</span><h2>Projects</h2><span class="road" aria-hidden="true"></span></div>
       <div class="projects-grid" id="projects-grid">
-        <!-- Populated from data.js by script.js -->
+        <!-- Rendered from /api/site-data/ by script.js -->
       </div>
     </div>
   </section>
 
-  <!-- ======== EXPERIENCE SECTION ======== -->
+  <!-- ======== EXPERIENCE ======== -->
   <section id="experience">
     <div class="container">
-      <h2>Experience</h2>
-      <div class="experience-list" id="experience-list">
-        <!-- Populated from data.js by script.js -->
-      </div>
+      <div class="stage-head"><span class="stage-plate">STAGE 04</span><h2>Experience</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="experience-list" id="experience-list"></div>
     </div>
   </section>
 
-  <!-- ======== ACHIEVEMENTS SECTION ======== -->
+  <!-- ======== ACHIEVEMENTS ======== -->
   <section id="achievements">
     <div class="container">
-      <h2>Achievements</h2>
-      <div class="achievements-grid" id="achievements-grid">
-        <!-- Populated from /api/site-data/ by script.js -->
-      </div>
+      <div class="stage-head"><span class="stage-plate">STAGE 05</span><h2>Achievements</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="achievements-grid" id="achievements-grid"></div>
     </div>
   </section>
 
-  <!-- ======== TALKS & WORKSHOPS SECTION ======== -->
+  <!-- ======== TALKS & WORKSHOPS ======== -->
   <section id="talks">
     <div class="container">
-      <h2>Talks &amp; Workshops</h2>
-      <div class="talks-list" id="talks-list">
-        <!-- Populated from /api/site-data/ by script.js -->
-      </div>
+      <div class="stage-head"><span class="stage-plate">STAGE 06</span><h2>Talks &amp; Workshops</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="talks-list" id="talks-list"></div>
     </div>
   </section>
 
-  <!-- ======== CERTIFICATIONS SECTION ======== -->
+  <!-- ======== CERTIFICATIONS ======== -->
   <section id="certifications">
     <div class="container">
-      <h2>Certifications</h2>
-      <div class="certifications-grid" id="certifications-grid">
-        <!-- Populated from /api/site-data/ by script.js -->
-      </div>
+      <div class="stage-head"><span class="stage-plate">STAGE 07</span><h2>Certifications</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="certifications-grid" id="certifications-grid"></div>
     </div>
   </section>
 
-  <!-- ======== TESTIMONIALS SECTION ======== -->
+  <!-- ======== TESTIMONIALS ======== -->
   <section id="testimonials">
     <div class="container">
-      <h2>Testimonials</h2>
-        <div class="testimonials-carousel" id="testimonials-carousel" tabindex="0" role="region" aria-label="Testimonials carousel">
-          <div class="testimonials-track" id="testimonials-track">
-            <!-- Populated from data.js by script.js -->
-          </div>
-          <div class="carousel-controls" aria-hidden="false">
-            <button class="carousel-prev" id="carousel-prev" aria-label="Previous testimonial">◀</button>
-            <button class="carousel-next" id="carousel-next" aria-label="Next testimonial">▶</button>
-          </div>
-        </div>
+      <div class="stage-head"><span class="stage-plate">STAGE 08</span><h2>Testimonials</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="testimonials-carousel" id="testimonials-carousel" tabindex="0" role="region" aria-label="Testimonials carousel">
+        <div class="testimonials-track" id="testimonials-track"></div>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-prev" id="carousel-prev" aria-label="Previous testimonial">◀</button>
+        <button class="carousel-next" id="carousel-next" aria-label="Next testimonial">▶</button>
+      </div>
     </div>
   </section>
 
-  <!-- ======== CONTACT SECTION ======== -->
+  <!-- ======== CONTACT ======== -->
   <section id="contact">
     <div class="container">
-      <h2>Contact Me</h2>
-      <p class="contact-intro">I'm available for freelance work and full-time opportunities. Send me a message and I'll get back within a few days.</p>
-      <form id="contact-form" class="contact-form" action="#" method="post">
-        <label for="contact-name">Name</label>
-        <input id="contact-name" name="name" type="text" required>
-
-        <label for="contact-email">Email</label>
-        <input id="contact-email" name="email" type="email" required>
-
-        <label for="contact-message">Message</label>
-        <textarea id="contact-message" name="message" rows="6" required></textarea>
-
-        <div class="contact-actions">
-          <button type="submit" class="btn">Send Message</button>
-          <a class="btn btn-ghost-blue" href="mailto:kimeddy@gmail.com">Email Me</a>
+      <div class="stage-head"><span class="stage-plate">LAST STAGE</span><h2>Contact Me</h2><span class="road" aria-hidden="true"></span></div>
+      <div class="contact-layout">
+        <div class="contact-ticket">
+          <p class="ticket-label">Ticket</p>
+          <p class="ticket-route">Your idea ▸ Live product</p>
+          <p class="contact-intro">I'm available for freelance work and full-time opportunities. Send me a message and I'll get back within a few days.</p>
+          <p class="ticket-line"><span>Email</span><a href="mailto:kimeddy@gmail.com">kimeddy@gmail.com</a></p>
+          <p class="ticket-line"><span>WhatsApp</span><a href="https://wa.me/254707185700" target="_blank" rel="noopener">+254 707 185 700</a></p>
         </div>
-        <p id="contact-status" aria-live="polite" class="contact-status" style="display:none"></p>
-      </form>
+        <form id="contact-form" class="contact-form" action="#" method="post">
+          <label for="contact-name">Name</label>
+          <input id="contact-name" name="name" type="text" required>
+
+          <label for="contact-email">Email</label>
+          <input id="contact-email" name="email" type="email" required>
+
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" rows="6" required></textarea>
+
+          <div class="contact-actions">
+            <button type="submit" class="btn btn-panda">Send message</button>
+            <a class="btn btn-ghost" href="mailto:kimeddy@gmail.com">Email me</a>
+          </div>
+          <p id="contact-status" aria-live="polite" class="contact-status" hidden></p>
+        </form>
+      </div>
     </div>
   </section>
+  </main>
 
-  <!-- ======== FOOTER ======== -->
-  <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <p>© 2025 Kim Eddy</p>
-        <div class="footer-links">
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-          <a href="#about">About</a>
-        </div>
-      </div>
+  <!-- ======== TERMINUS (FOOTER) ======== -->
+  <footer class="terminus">
+    <div class="stripe" aria-hidden="true"></div>
+    <div class="container footer-inner">
+      <span class="bye">SHUKA SALAMA ✦</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <small>© {% now "Y" %} Kim Eddy · Route 254</small>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <button class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
   <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
-

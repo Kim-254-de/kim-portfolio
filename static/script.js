@@ -5,7 +5,8 @@ async function fetchSiteData() {
     return await res.json();
   } catch (err) {
     console.error('Failed to load portfolio content from the API:', err);
-    return { projects: [], experience: [], testimonials: [], skillLevels: {} };
+    return { projects: [], experience: [], testimonials: [], skillLevels: {},
+             achievements: [], talks: [], certifications: [] };
   }
 }
 
@@ -22,23 +23,34 @@ document.addEventListener('DOMContentLoaded', async function () {
     const grid = document.getElementById('projects-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    (siteData.projects || []).forEach(p => {
+    (siteData.projects || []).forEach((p, i) => {
       const article = document.createElement('article');
       article.className = 'project';
 
-      const h3 = document.createElement('h3');
-      h3.textContent = p.title;
+      const stripe = document.createElement('div');
+      stripe.className = 'stripe';
+      stripe.setAttribute('aria-hidden', 'true');
 
-      const inner = document.createElement('div');
-      inner.className = 'project-inner';
-
-      const img = document.createElement('img');
-      img.className = 'project-img';
-      img.src = p.image || '';
-      img.alt = (p.title || '') + ' screenshot';
+      const art = document.createElement('div');
+      art.className = 'project-art';
+      if (p.image) {
+        const img = document.createElement('img');
+        img.className = 'project-img';
+        img.src = p.image;
+        img.alt = (p.title || '') + ' screenshot';
+        img.loading = 'lazy';
+        art.appendChild(img);
+      }
+      const plate = document.createElement('span');
+      plate.className = 'route-plate';
+      plate.textContent = 'R·' + String(i + 1).padStart(2, '0');
+      art.appendChild(plate);
 
       const content = document.createElement('div');
       content.className = 'project-content';
+
+      const h3 = document.createElement('h3');
+      h3.textContent = p.title;
 
       const desc = document.createElement('p');
       desc.textContent = p.desc || '';
@@ -53,10 +65,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       const actions = document.createElement('div');
       actions.className = 'project-actions';
-
       if (p.github) {
         const ghLink = document.createElement('a');
-        ghLink.className = 'btn backdrop-blur-sm bg-white/5 text-white border border-white/10 hover:bg-white/10 transition';
+        ghLink.className = 'btn btn-panda btn-small';
         ghLink.href = p.github;
         ghLink.target = '_blank';
         ghLink.rel = 'noopener';
@@ -64,19 +75,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         actions.appendChild(ghLink);
       }
 
-      const detailsLink = document.createElement('a');
-      detailsLink.className = 'btn btn-ghost-blue';
-      detailsLink.href = p.detailsHref || '#projects';
-      detailsLink.textContent = 'View details';
-      actions.appendChild(detailsLink);
-
-      content.appendChild(desc);
-      content.appendChild(tech);
-      content.appendChild(actions);
-      inner.appendChild(img);
-      inner.appendChild(content);
-      article.appendChild(h3);
-      article.appendChild(inner);
+      content.append(h3, desc, tech);
+      if (actions.childElementCount) content.appendChild(actions);
+      article.append(stripe, art, content);
       grid.appendChild(article);
     });
   })();
@@ -257,60 +258,150 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   })();
 
-  // ===== PARTICLES ANIMATION =====
-  const canvas = document.getElementById('particles-canvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  // ===== MANYOKA: the Route Kim nganya dances across the hero, both ways, forever =====
+  (function initManyoka() {
+    const stage = document.getElementById('nganya-stage');
+    const track = document.getElementById('nganya-track');
+    const car = document.getElementById('nganya-car');
+    const svg = document.getElementById('nganya');
+    const symbol = document.getElementById('nganya-svg');
+    if (!stage || !track || !car || !svg || !symbol) return;
 
-    const particles = [];
-    const particleCount = 50;
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 1.5 + 0.5;
-        this.color = Math.random() > 0.5 ? 'rgba(0,255,255,' : 'rgba(255,0,255,';
-        this.alpha = Math.random() * 0.5 + 0.3;
-      }
+    // Clone the symbol's layers into the hero so each part (body, wheels, text) can move on its own.
+    svg.innerHTML = symbol.innerHTML;
+    const body = svg.querySelector('.ng-body');
+    const wheels = [...svg.querySelectorAll('.ng-wheel')];
 
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
+    const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reducedQuery.matches) return; // stays parked, lights on
 
-      draw() {
-        ctx.fillStyle = this.color + this.alpha + ')';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const wait = ms => stage.animate([], { duration: ms }).finished; // pauses with everything else
+
+    // Each move returns an Animation. `dir` is 1 when driving right, -1 when driving left.
+    // Body moves happen inside the mirrored SVG, so they're already the right way round;
+    // only whole-car moves need `dir`.
+    const moves = {
+      // hydraulics: the body bounces on its springs
+      bounce: () => body.animate([
+        { transform: 'translateY(0)' }, { transform: 'translateY(-9px)' }, { transform: 'translateY(0)' },
+        { transform: 'translateY(-6px)' }, { transform: 'translateY(0)' }, { transform: 'translateY(-3px)' },
+        { transform: 'translateY(0)' }
+      ], { duration: rand(900, 1300), easing: 'ease-in-out' }),
+      // rocks side to side on its suspension
+      rock: () => body.animate([
+        { transform: 'rotate(0)' }, { transform: 'rotate(-3.5deg)' }, { transform: 'rotate(3deg)' },
+        { transform: 'rotate(-2deg)' }, { transform: 'rotate(1deg)' }, { transform: 'rotate(0)' }
+      ], { duration: rand(1300, 1800), easing: 'ease-in-out' }),
+      // weaves between lanes: closer to us, then away
+      swerve: dir => car.animate([
+        { transform: 'translateY(0) scale(1) rotate(0)' },
+        { transform: `translateY(14px) scale(1.05) rotate(${dir * 2}deg)` },
+        { transform: `translateY(-10px) scale(.95) rotate(${dir * -2}deg)` },
+        { transform: `translateY(8px) scale(1.03) rotate(${dir * 1.5}deg)` },
+        { transform: 'translateY(0) scale(1) rotate(0)' }
+      ], { duration: rand(1800, 2400), easing: 'ease-in-out' }),
+      // pops the front up on the rear wheel
+      wheelie: dir => {
+        car.style.transformOrigin = dir > 0 ? '23% 95%' : '77% 95%';
+        return car.animate([
+          { transform: 'rotate(0)' },
+          { transform: `rotate(${dir * -8}deg)`, offset: .35 },
+          { transform: `rotate(${dir * -6}deg)`, offset: .6 },
+          { transform: `rotate(${dir * 1.5}deg)`, offset: .85 },
+          { transform: 'rotate(0)' }
+        ], { duration: rand(1400, 1800), easing: 'ease-in-out' });
+      },
+      // hard brake: nose dips, then springs back
+      brake: () => body.animate([
+        { transform: 'rotate(0)' }, { transform: 'rotate(3.5deg)', offset: .25 },
+        { transform: 'rotate(-1.5deg)', offset: .6 }, { transform: 'rotate(0)' }
+      ], { duration: 1100, easing: 'ease-out' }),
+      // the whole nganya hops, LEDs flashing
+      hop: () => {
+        car.classList.add('is-flash');
+        const a = car.animate([
+          { transform: 'translateY(0)' }, { transform: 'translateY(-26px)', offset: .3 },
+          { transform: 'translateY(0)', offset: .55 }, { transform: 'translateY(-10px)', offset: .75 },
+          { transform: 'translateY(0)' }
+        ], { duration: 1200, easing: 'ease-in-out' });
+        a.finished.finally(() => car.classList.remove('is-flash'));
+        return a;
       }
+    };
+    // wheels spin forever; their speed follows the drive
+    const spins = wheels.map(w => w.animate(
+      [{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }],
+      { duration: 700, iterations: Infinity }
+    ));
+
+    let dir = 1;
+    let drive = null;
+
+    async function pass() {
+      const stageW = stage.clientWidth;
+      const carW = track.offsetWidth;
+      const from = dir > 0 ? -carW - 40 : stageW + 40;
+      const to = dir > 0 ? stageW + 40 : -carW - 40;
+      const span = to - from;
+      svg.classList.toggle('is-left', dir < 0);
+      const duration = Math.max(14000, Math.abs(span) * 8);
+      // fast on the way in and out, slower in the middle where it shows off
+      drive = track.animate([
+        { transform: `translateX(${from}px)` },
+        { transform: `translateX(${from + span * .38}px)`, offset: .25 },
+        { transform: `translateX(${from + span * .62}px)`, offset: .75 },
+        { transform: `translateX(${to}px)` }
+      ], { duration, easing: 'linear', fill: 'forwards' });
+      stage.classList.add('is-driving');
+
+      let done = false;
+      drive.finished.then(() => { done = true; });
+      let last = '';
+      while (!done) {
+        const t = drive.currentTime / duration;
+        const slow = t > .25 && t < .75;
+        spins.forEach(s => s.updatePlaybackRate(slow ? .45 : 1));
+        if (t > .08 && t < .9) {
+          const name = pick(Object.keys(moves).filter(m => m !== last));
+          last = name;
+          await moves[name](dir).finished;
+        }
+        await wait(rand(150, 500));
+      }
+      dir = -dir;
     }
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
+    (async function loop() {
+      for (;;) await pass();
+    })();
 
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    // pause everything while the hero is off screen
+    const io = new IntersectionObserver(entries => {
+      const visible = entries[0].isIntersecting;
+      stage.getAnimations({ subtree: true }).forEach(a => visible ? a.play() : a.pause());
     });
-  }
+    io.observe(stage);
+  })();
+
+  // ===== ROUTE MAP: drive the nganya along the road as the page scrolls =====
+  (function initRouteProgress() {
+    const map = document.getElementById('route-map');
+    if (!map) return;
+    let ticking = false;
+    function update() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      map.style.setProperty('--progress', progress.toFixed(4));
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
 
   // ===== SCROLL INDICATOR =====
   const scrollIndicator = document.getElementById('scroll-indicator');
@@ -390,12 +481,40 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   }
 
+  // ===== ROUTE BOARD: mark the stage currently in view =====
+  (function trackActiveStage() {
+    const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"], .route-stops a[href^="#"]'));
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    const byId = new Map();
+    links.forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      if (!byId.has(id)) byId.set(id, []);
+      byId.get(id).push(a);
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        links.forEach(a => a.classList.remove('is-active'));
+        (byId.get(entry.target.id) || []).forEach(a => a.classList.add('is-active'));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    byId.forEach((_, id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+  })();
+
   // ====== SKILLS: data, rendering and interactions ======
   const skillsGrid = document.getElementById('skills-grid');
   const skillsControls = document.getElementById('skills-controls');
 
-  // placeholder for projects data (populated later). Declare here so skills code can reference it safely.
-  let projectsData = [];
+  // Project data from the API, used by the skills section and the terminal.
+  let projectsData = (siteData.projects || []).map(p => ({
+    title: p.title,
+    desc: p.desc || '',
+    tech: p.tech || [],
+    href: p.github || '#projects'
+  }));
 
   // Build skills data from project tech tags when possible. Fallback to reasonable defaults.
   function normalizeTech(t) {
@@ -415,7 +534,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   function categorizeTech(name) {
     const n = (name || '').toLowerCase();
-    if (/javascript|typescript|python|java|c#|c\+\+|go|rust/.test(n)) return 'Languages';
+    if (['javascript','typescript','python','java','c#','c++','go','golang','rust','php','kotlin','dart','sql'].includes(n)) return 'Languages';
     if (/react|vue|angular|svelte|next|express|node|django|flask|graphql/.test(n)) return 'Frameworks';
     return 'Tools';
   }
@@ -589,14 +708,15 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (termEl && caret) {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const PROMPT = 'makanga@route254:~$';
     const lines = [
-      { type: 'cmd', text: 'kimeddy@portfolio:~$ whoami' },
-      { type: 'out', text: 'Kim Eddy — Futuristic Full-Stack Developer' },
-      { type: 'cmd', text: 'kimeddy@portfolio:~$ skills --top' },
-      { type: 'out', text: 'JavaScript • Node.js • React • Python • DevOps' },
-      { type: 'cmd', text: 'kimeddy@portfolio:~$ open projects' },
+      { type: 'cmd', text: PROMPT + ' whoami' },
+      { type: 'out', text: 'Kim Eddy, full-stack & AI engineer. Route 254.' },
+      { type: 'cmd', text: PROMPT + ' route --next' },
+      { type: 'out', text: 'Tharaka ▸ Nairobi ▸ the web. Seats available.' },
+      { type: 'cmd', text: PROMPT + ' open projects' },
       // mark this output with a link target so we can make it clickable
-      { type: 'out', text: 'Showing latest projects... ', link: '#projects', linkText: 'Open projects' }
+      { type: 'out', text: 'Panda! Projects are this way:', link: '#projects', linkText: 'Open projects' }
     ];
 
   // If reduced motion, render all lines statically
@@ -627,7 +747,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       // enable prompt for interaction
       if (termInput) {
         termInput.disabled = false;
-        termInput.focus();
       }
       // hide the decorative typing caret since input provides native caret
       if (caret) caret.style.display = 'none';
@@ -677,8 +796,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           // intro finished: enable prompt and focus
           if (termInput) {
             termInput.disabled = false;
-            termInput.focus();
-          }
+              }
           if (caret) {
             caret.classList.add('blink');
             // hide decorative caret since input has native caret
@@ -693,8 +811,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
       }
 
-      // kick off
-      runSequence();
+      // kick off once the console scrolls into view
+      if ('IntersectionObserver' in window) {
+        const startObserver = new IntersectionObserver(entries => {
+          if (entries.some(e => e.isIntersecting)) {
+            startObserver.disconnect();
+            runSequence();
+          }
+        }, { threshold: 0.3 });
+        startObserver.observe(termEl);
+      } else {
+        runSequence();
+      }
     }
 
     // --- CLI: basic interactive behavior ---
@@ -711,10 +839,10 @@ document.addEventListener('DOMContentLoaded', async function () {
       let histIndex = history.length;
 
       // autocomplete commands
-      const COMMANDS = ['help','projects','open','skills','about','contact','resume','clear'];
+      const COMMANDS = ['help','whoami','projects','open','skills','about','contact','resume','clear'];
 
-  // try to load projects from the #projects DOM; fall back to sample data
-  projectsData = (function loadProjectsFromDOM() {
+  // fall back to reading projects from the DOM only if the API returned none
+  if (!projectsData.length) projectsData = (function loadProjectsFromDOM() {
         try {
           const container = document.querySelector('#projects');
           const found = [];
@@ -753,27 +881,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (err) {
           // ignore and fall back
         }
-        // fallback sample data
-        return [
-          {
-            title: 'Neon Tasks',
-            desc: 'A realtime task manager with WebSocket sync and offline-first support.',
-            tech: ['React','Node.js','WebSocket'],
-            href: '#projects'
-          },
-          {
-            title: 'Orbital UI',
-            desc: 'Design system and component library for futuristic interfaces.',
-            tech: ['TypeScript','Styled Components'],
-            href: '#projects'
-          },
-          {
-            title: 'Photon API',
-            desc: 'High-performance GraphQL API with caching and observability.',
-            tech: ['GraphQL','Kubernetes'],
-            href: '#projects'
-          }
-        ];
+        return [];
       })();
 
         // Re-render skills now that `projectsData` is populated so buttons enable/disable correctly
@@ -860,17 +968,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         const cmd = (raw || '').trim();
         if (!cmd) return;
         // echo command
-        appendLine('kimeddy@portfolio:~$ ' + cmd, 'cmd');
+        appendLine(PROMPT + ' ' + cmd, 'cmd');
 
         const parts = cmd.split(/\s+/);
         const base = parts[0].toLowerCase();
 
         switch (base) {
           case 'help':
-            appendLine('Available commands: help, projects, open <section>, skills, about, contact, resume, clear');
+            appendLine('Stages: help, whoami, projects, open <section>, skills, about, contact, resume, clear');
+            break;
+          case 'whoami':
+            appendLine('Kim Eddy, full-stack & AI engineer. Route 254.');
             break;
           case 'projects':
-            appendLine('Showing projects:');
+            if (!projectsData.length) { appendLine('No projects loaded yet.'); break; }
+            appendLine('Panda! Showing projects:');
             // render project cards in-terminal
             projectsData.forEach(p => appendProjectCard(p));
             break;
@@ -888,10 +1000,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             break;
           case 'skills':
-            appendLine('JavaScript • Node.js • React • Python • DevOps');
+            appendLine(skillsData.map(s => s.name).join(' • '));
             break;
           case 'about':
-            appendLine('I build futuristic web apps — scroll to About for more.');
+            appendLine('I build reliable, AI-driven systems. Taking you to About...');
             const about = document.querySelector('#about');
             if (about) about.scrollIntoView({ behavior: 'smooth' });
             break;
@@ -901,21 +1013,21 @@ document.addEventListener('DOMContentLoaded', async function () {
             const mailDiv = document.createElement('div');
             mailDiv.className = 'term-line out';
             const mailA = document.createElement('a');
-            mailA.href = 'mailto:kim@example.com';
-            mailA.textContent = 'kim@example.com';
+            mailA.href = 'mailto:kimeddy@gmail.com';
+            mailA.textContent = 'kimeddy@gmail.com';
             mailA.className = 'term-link';
             mailDiv.appendChild(mailA);
             termEl.appendChild(mailDiv);
             mailDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
             break;
           case 'resume':
-            appendLinkLine('Resume:', '/assets/resume.pdf', 'Download resume');
+            appendLinkLine('Resume available on request:', '#contact', 'Go to contact');
             break;
           case 'clear':
             termEl.innerHTML = '';
             break;
           default:
-            appendLine("Command not found: '" + cmd + "'. Try 'help'.");
+            appendLine("Hiyo route haipo: '" + cmd + "'. Try 'help'.");
         }
       }
 
